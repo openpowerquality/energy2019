@@ -367,22 +367,18 @@ Conferences\\[-1.5ex] and subtitle}\\[0.2ex]}
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{~\\[-0.4ex]\large Michael Shell\\[0.3ex]\normalsize}
-\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
-Georgia Institute of Technology\\
-Atlanta, Georgia 30332--0250\\
-Email: {\tt ...}}
+\author{\IEEEauthorblockN{~\\[-0.4ex]\large Charles Dickens\\[0.3ex]\normalsize}
+\IEEEauthorblockA{Department of Electrical and\\Computer Engineering\\
+University of Hawaii Manoa\\
+Honolulu, Hawaii 96822\\
+Email: {\tt dickensc@hawaii.edu}}
 \and
-\IEEEauthorblockN{~\\[-0.4ex]\large Homer Simpson\\[0.3ex]\normalsize}
-\IEEEauthorblockA{Twentieth Century Fox\\
-Springfield, USA\\
-Email: {\tt homer@thesimpsons.com}}
-\and
-\IEEEauthorblockN{~\\[-0.4ex]\large James Kirk\\ and Montgomery Scott\\[0.3ex]\normalsize}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678-2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
+\IEEEauthorblockN{~\\[-0.4ex]\large Anthony Christe\\[0.3ex]\normalsize}
+\IEEEauthorblockA{Department of Information and\\Computer Sciences\\
+University of Hawaii Manoa\\
+Honolulu, Hawaii 96822\\
+Email: {\tt @hawaii.edu}}
+}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -457,100 +453,93 @@ Anything; Something; Everything else.%
 
 \section{Introduction}
 % no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.7 and later.
+<sentence about pressures to modernize grids and citation>
+Introducing renewable energy generation to existing electrical grid infrastructures has proven itself to be an engineering challenge. The transition to cleaner energy generation methods such as wind and solar, which are inherently stochastic, has increased the severity and frequency of power quality phenomena \cite{Radu:2014:RenewableImpacts}. Sensitive instruments connected to an unstable grid can potentially be thrown off of calibration or damaged.
+
+The first step to correcting power quality phenomena is understanding the problem from top to bottom. Electricity being supplied by the grid should be continuously monitored to detect and log power quality events. Records that classify power quality phenomena can reveal problematic patterns of the system and provide potential explanations for failures that can be understood and resolved. 
+
+There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification} \cite{Manikandan:2014:PQClassificationUsingSSD} \cite{Thirumala:2016:PQClassificationUsingWavelet} \cite{Rodriguez:2014:PQClassificationUsingANN} \cite{Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. These approaches are...
+
+The contribution of this paper is a tractable, robust, and verified method for classifying transients by leveraging the well defined characteristics of the transients we are interested in. ...
+
+This paper is structured as follows...
+
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
 
 \hfill mds
  
-\hfill January 11, 2007
+\hfill February 10, 2019
 
-\subsection{Subsection Heading Here}
-
-Subsection text here.
-Subsection text here.
-Subsection text here.
-Subsection text here.
-
-
-\subsubsection{Subsubsection Heading Here}
-
-Subsubsection text here.
-Subsubsection text here.
-Subsubsection text here.
-Subsubsection text here.
-
-Examples for citations and references \cite{Firstman:2014:Approach} and \cite{Firstman:2013:Ongoing}
-and \cite{Webpage:2014:Somewebpage}
-and \cite{Bookman:2014:Somebook} and \cite{Chapman:2014:Starting}.
-In a consecutive use these are referenced as
-\cite{Firstman:2014:Approach,Firstman:2013:Ongoing,Webpage:2014:Somewebpage,Bookman:2014:Somebook,Chapman:2014:Starting}.
-
-\subsection{Subsection Heading Here}
-Now, we add some itemize and enumerate.
-Now, we add some itemize and enumerate.
-Now, we add some itemize and enumerate.
-Now, we add some itemize and enumerate:
-\begin{itemize}
-\item First item.
-\begin{itemize}
-\item First subitem.
-\item Second subitem.
-\item Third subitem.
-\end{itemize}
-\item Second item.
-\item Third item.
-\end{itemize}
-
-\begin{enumerate}
-\item First item.
-\begin{enumerate}
-\item First subitem.
-\item Second subitem.
-\item Third subitem.
-\end{enumerate}
-\item Second item.
-\item Third item.
-\end{enumerate}
-
-\subsection{Subsection Heading Here}
-
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats.
-Now, we add some floats (Figure~\ref{myfigone} and Table~\ref{mytabone}):\medskip
-
-\begin{figure}[htbp]
-\centering%
-\fbox{\texttt{Insert figure stuff here.}}
-\caption{My figure.}\label{myfigone}
-\end{figure}
-
+\section{Methodology}
+The transients that are classified with the methodologies proposed in this paper are clearly defined in the IEEE 1159 Draft Recommended Practice for Monitoring Electric Power Quality \cite{IEEE:2018:1159D3}. Table \ref{TransientClasses} summarizes the definition and characteristics of each transient.
 
 \captionsetup{font={footnotesize,sc},justification=centering,labelsep=period}%
 \begin{table}[htbp]
-\caption{My table.}\label{mytabone}
+\caption{Transient Classes}\label{TransientClasses}
 \centering%
 \begin{tabular}{lll}
 \hline
-\textit{Column 1} & \textit{Column 2} & \textit{Column 3} \\
+\textit{Class} & \textit{Description} \\
 \hline
-a) & Insert more table stuff here. & $\ldots$\\
-b) & Insert more table stuff here. & $\ldots$\\
-c) & Insert more table stuff here. & $\ldots$\\
+Impulsive & Unidirectional change from the nominal waveform. \\
+Arcing & Bipolar random frequency noise. \\
+Oscillatory & Decaying oscillatory wave. \\
+Periodic Notching & Periodic and strictly negative in power. \\
 \hline
 \end{tabular}
 \end{table}
 \captionsetup{font={footnotesize,rm},justification=centering,labelsep=period}%
 
+A decision tree algorithm is used to classify signals with potential transients. The benefit of this approach is that it minimizes unnecessary computation. As power quality features are mined from the signal, the potential classes that it could fall into are narrowed. Computationally expensive analysis can be bypassed if simple features can rule out a class early in the process. Leveraging this idea, the potential transients are checked to see if they fit the classes in the same order as listed in table \ref{TransientClasses}. Once the signal is classified, then additional meta data can be computed that appropriately detail the transient.
+
+\subsection{Signal Decomposition}
+
+The first task is to decompose the raw signal into the fundamental waveform and the potential transient waveform. In the context of this application, the fundamental waveform is expected to have little to no variation from the standard, which for where this methodology was tested is $60$Hz and $120$ Vrms \cite{ANSI:2016:C84.1-2016}. There is the potential for simultaneous waveform distortion and transient power quality phenomena. However, waveform distortions for frequency phenomena are typically found to only vary by $\pm 0.1$Hz and for voltage phenomena by $0.1-1.8$pu \cite{IEEE:2018:1159D3}. Whereas the transients that the system is capturing typically have a spectral content between $1$kHz-$5$MHz. 
+
+Thus, a simple digital implementation of a low pass $4^{th}$ order Butterworth filter with a cutoff frequency at $500$Hz is justifiable and practical for this application to extract the fundamental waveform from the raw digital signal. A different filter could have been used to achieve similar results. Using a Butterworth filter with the order and cutoff frequency mentioned was a design decision made for its tractability and due to the desirable property that the filter is monotonic in both the passband and stopband resulting is a clean decomposition. Once the fundamental waveform is retrieved, the transient waveform is then obtained by subtracting out the fundamental waveform from the raw signal.
+
+\subsection{Classifying Impulsive Transients}
+
+First in the decision tree algorithm is the test for the whether the transient could be impulsive. This is the first class to test since the power quality traits that are necessary and sufficient to show that the transient is impulsive are computationally cheap to verify. As defined by the IEEE 1159 standards, an impulsive transient is a unidirectional change from the nominal condition of the voltage \cite{IEEE:2018:1159D3}. Therefore, a simple check which ensures that the excitation in the transient waveform is unipolar will qualify the transient to be in the broad category of impulsive transients. 
+
+If the transient is impulsive, then arcing and oscillatory can be ruled out. Additional corner cases do need to be accounted for since there is a chance that the transient could also be periodic notching. If the impulsive transient was positive in power, then periodic notching can be ruled out, otherwise it needs to be tested. At this point meta data detailing the rise and decay time, the peak amplitude, and whether or not the transient caused additional zero crossings in the raw signal can be calculated and recorded with the classification. 
+
+\subsection{Classifying Arcing Transients}
+
+The test for arcing... 
+
+\subsection{Classifying Oscillatory Transients}
+
+An oscillatory transient is a bipolar change that typically lasts between a few milliseconds to a quarter cycle of the nominal waveform. It is characterized by its frequency content and decay rate \cite{IEEE:2018:1159D3}. 
+
+To determine whether the potential transient fits the oscillatory classification, the system implements an incremental F-Test. The null hypothesis of the test is  $H_0: \beta_3 = \beta_4 = \beta_5 = 0$ in the complete model shown in equation \ref{eq:completeModel}. The F-Test gives a numerical value of the significance of additional variables added to the regression function. 
+
+First a least squares curve fitting of the potential transient waveform and an exponentially decaying sinusoid is determined using gradient descent. The complete model is shown in equation \ref{eq:completeModel}
+
+\begin{equation}
+\label{eq:completeModel}
+\hat{y} = \beta_0 + \beta_1 e^{-\beta_2 t} cos(\beta_3 \cdot 2 \pi t + \beta_4)
+\end{equation}
+
+Then a reduced model is fit using the same least square fitting methods. The reduced model equation is shown in \ref{eq:reducedModel}
+
+\begin{equation}
+\label{eq:reducedModel}
+\hat{y} = \beta_0 + \beta_1 e^{-\beta_2 t}
+\end{equation}
+
+Large values of F result in rejection of the null hypothesis and the classification of the transient to oscillatory. The threshold value that F must pass is a design decision and will determine the expected type 1 and type 2 errors of the classification. 
+
+Additional meta data that can be recorded after the classification includes the decay rate, frequency content, dc offset, and peak amplitude, all of which follow immediately from the curve fitting. 
+
+\subsection{Classifying Periodic Notching Transients}
+
+A periodic notching transient is a periodic and strictly negative power disruption of the nominal waveform. Therefore, the signal is first verified to be strictly negative in power before further analysis is made. If so, the system moves on to determine whether the potential transient waveform is periodic. 
+
+To test for periodicity the autocorrelation of the signal is computed. Autocorrelation highlights the similarity between the signal and its previous values. The method used by the system convolves the first half the transient signal with the original transient. The convolution is only calculated for points where the signals completely overlap. If the potential transient is indeed periodic, then the resulting signal from the convolution will have the same periodicity with peaks that highlight where the signal had the highest correlation. 
+
+The peaks of the autocorrelation signal are determined by setting a height threshold. Then the standard deviation of distance between the peaks is found, and if its is less than a defined threshold the signal is determined to be periodic. At which point the period can be easily calculated from autocorrelation signal along with additional interesting meta data to characterize the transient. 
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -635,8 +624,26 @@ c) & Insert more table stuff here. & $\ldots$\\
 % command of the stfloats package.
 
 
+\section{Implementation}
+The methodologies proposed in this paper were implemented and tested on the Open Power Quality (OPQ) system. The OPQ project began in 2012 with the goal of developing and evaluating technology to support important improvements to the electrical infrastructure. 
 
-\section{Conclusion}
+At the 10,000 foot level, the OPQ system architecture is simple: OPQ boxes are plugged into outlets, they monitor the quality of power, and the results are communicated to cloud based storage. Taking a closer look, OPQ consists of four major open source hardware and software components that provide end-to-end support for the capture, triggering, analysis, and reporting of local and global level power quality phenomena. 
+
+
+
+\begin{figure}[htbp]
+\centering%
+\fbox{\texttt{Insert figure stuff here.}}
+\caption{My figure.}\label{myfigone}
+\end{figure}
+
+\section{Results}
+The conclusion goes here.
+The conclusion goes here.
+The conclusion goes here.
+The conclusion goes here.
+
+\section{Conclusion and Future Work}
 The conclusion goes here.
 The conclusion goes here.
 The conclusion goes here.
@@ -687,10 +694,6 @@ The authors would like to thank...
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-
-
-
 
 % that's all folks
 \end{document}
