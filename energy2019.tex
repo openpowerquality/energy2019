@@ -168,7 +168,7 @@
 %
 % You can find documentation about the pdfTeX application at:
 % http://www.tug.org/applications/pdftex
-
+\usepackage{graphicx}
 
 
 
@@ -458,11 +458,11 @@ Introducing renewable energy generation to existing electrical grid infrastructu
 
 The first step to correcting power quality phenomena is understanding the problem from top to bottom. Electricity being supplied by the grid should be continuously monitored to detect and log power quality events. Records that classify power quality phenomena can reveal problematic patterns of the system and provide potential explanations for failures that can be understood and resolved. 
 
-There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification} \cite{Manikandan:2014:PQClassificationUsingSSD} \cite{Thirumala:2016:PQClassificationUsingWavelet} \cite{Rodriguez:2014:PQClassificationUsingANN} \cite{Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. These approaches are...
+There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification} \cite{Manikandan:2014:PQClassificationUsingSSD} \cite{Thirumala:2016:PQClassificationUsingWavelet} \cite{Rodriguez:2014:PQClassificationUsingANN} \cite{Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. 
 
-The contribution of this paper is a tractable, robust, and verified method for classifying transients by leveraging the well defined characteristics of the transients we are interested in. ...
+The contribution of this paper is a tractable, robust, and verified implementation for classifying transients on an open source distributed power quality network. 
 
-This paper is structured as follows...
+This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality project's open source distributed power quality monitoring system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally section \ref{sec:Conlcusion} closes this paper with some final conclusions
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -508,7 +508,9 @@ If the transient is impulsive, then arcing and oscillatory can be ruled out. Add
 
 \subsection{Classifying Arcing Transients}
 
-The test for arcing... 
+An arcing transient is a burst of relatively higher frequency noise that is random in frequency content. The arcing transient should have more than ten zero crossings and should not have more than two cycles with same period \cite{IEEE:2018:1159D3}. 
+
+The test for arcing transients can therefore simply be a verification of more than ten zero crossings and a threshold for randomness in the frequency content. The defined threshold for randomness is whether more that two zero crossings have the same period.
 
 \subsection{Classifying Oscillatory Transients}
 
@@ -626,6 +628,7 @@ The peaks of the autocorrelation signal are determined by setting a height thres
 
 
 \section{Implementation}
+\label{sec:Implementation}
 The methodologies proposed in this paper were implemented and tested on the Open Power Quality (OPQ) system. The OPQ project began in 2012 with the goal of developing and evaluating technology to support important improvements to the electrical infrastructure. 
 
 At the 10,000 foot level, the OPQ system architecture is simple: OPQ boxes are plugged into outlets, they monitor the quality of power, and the results are communicated to cloud based storage. Taking a closer look, OPQ consists of four major open source hardware and software components that provide end-to-end support for the capture, triggering, analysis, and reporting of local and global level power quality phenomena. 
@@ -647,36 +650,61 @@ The multiple non linear least squares regression required for classification of 
 To classify periodic notching transient classification a convolution operation is necessary. The code used to implement this calculation is found in the NumPy library \cite{numpy}. 
 
 \section{Results}
+\label{sec:Results}
+To test the performance of the proposed methodology simulated transients were constructed and ran through the system with satisfying results. 
 
-To test the performance of the proposed methodology 
+First a simulated waveform with an impulsive transient is created by superimposing an exponentially decaying excitation onto a portion of $6$ cycles of a fundamental waveform. The transient has a peak amplitude of $18$ volts and decays to the noise floor in $\frac{1}{32}$ cycles. The raw signal is shown in figure \ref{fig:ImpulsiveSim}.
+
+Next, a simulated waveform with an oscillatory transient is created by superimposing an exponentially decaying sinusoidal wave with $960$Hz frequency with starting amplitude of $72$ volts onto a portion of $6$ cycles of a fundamental waveform. The raw signal is shown in figure \ref{fig:OscillatorySim}.
+
+A simulated arcing transient is created by drawing 7 random samples from a uniform random distribution over the support $(61, 2401)$. Then the random samples are used to define the frequencies for single cycles of an arcing transient wave. The raw signal is shown in figure \ref{fig:ArcingSim}.
+
+A simulated multiple zero crossing transient is created by superimposing three single sawtooth cycles in positions of the fundamental waveform near a zero crossing. The single sawtooth cycle has an amplitude of a $72$ volts and a period of $10$ samples. The configuration of the system at the time of theses reported results has the sampling rate at $12000$Hz. 
+
+Finally, a simulated waveform with a periodic notching transient is created by superimposing a sawtooth waveform with a frequency of $1440$Hz and amplitude of $18$ volts for a single fundamental cycle, i.e. 24 notches per cycle for one cycle. The polarity of the notching transient is determined by that of the fundamental signal since notching is defined to be strictly negative in power.
 
 \begin{figure}[htbp]
 \centering%
-\fbox{\texttt{Insert figure stuff here.}}
-\caption{My figure.}\label{myfigone}
+\includegraphics[scale=0.35]{./figures/impulsive_sim.png}
+\caption{Simulated $60$Hz $120$Vrms sine wave with an impulsive transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:ImpulsiveSim}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering%
+\includegraphics[scale=0.35]{./figures/oscillatory_sim.png}
+\caption{Simulated $60$Hz $120$Vrms sine wave with an oscillatory transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:OscillatorySim}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering%
+\includegraphics[scale=0.35]{./figures/arcing_sim.png}
+\caption{Simulated $60$Hz $120$Vrms sine wave with an arcing transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:ArcingSim}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering%
+\includegraphics[scale=0.35]{./figures/mult_z_crossing_sim.png}
+\caption{Simulated $60$Hz $120$Vrms sine wave with an arcing transient. The first decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:ArcingSim}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering%
+\includegraphics[scale=0.35]{./figures/notching_sim.png}
+\caption{Simulated $60$Hz $120$Vrms sine wave with a periodic notching transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:NotchingSim}
+\end{figure}
+
+Figures \ref{fig:ImpulsiveSim}, \ref{fig:OscillatorySim}, \ref{fig:NotchingSim} show the raw simulated waveforms with impulsive, oscillatory, and periodic notching transients, respectively, all starting near the $600^{th}$ measurements. The two subfigures show the extracted fundamental waveform and transient waveform detected by the system. This simulated waveform were all correctly classified by the system as having transients using the proposed methodologies. 
+
 \section{Conclusion and Future Work}
+\label{sec:Conlcusion}
 The conclusion goes here.
 The conclusion goes here.
 The conclusion goes here.
 The conclusion goes here.
-
-
 
 
 % conference papers do not normally have an appendix
-
-
-% use section* for acknowledgement
-\section*{Acknowledgment}
-
-
-The authors would like to thank...
-
-
-
-
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
