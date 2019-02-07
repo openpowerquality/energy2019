@@ -361,8 +361,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{\textbf{\Large Bare Demo of IEEEtran.cls for
-Conferences\\[-1.5ex] and subtitle}\\[0.2ex]}
+\title{\textbf{\Large A Transient Classification System Implementation on an Open Source Distributed Power Quality Network}\\[0.2ex]}
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -417,12 +416,7 @@ Email: {\tt @hawaii.edu}}
 
 \begin{abstract}
 %\boldmath
-The abstract goes here.
-The abstract goes here.
-The abstract goes here.
-The abstract goes here.
-The abstract goes here.
-The abstract goes here.
+
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -453,16 +447,15 @@ Anything; Something; Everything else.%
 
 \section{Introduction}
 % no \IEEEPARstart
-<sentence about pressures to modernize grids and citation>
 Introducing renewable energy generation to existing electrical grid infrastructures has proven itself to be an engineering challenge. The transition to cleaner energy generation methods such as wind and solar, which are inherently stochastic, has increased the severity and frequency of power quality phenomena \cite{Radu:2014:RenewableImpacts}. Sensitive instruments connected to an unstable grid can potentially be thrown off of calibration or damaged.
 
 The first step to correcting power quality phenomena is understanding the problem from top to bottom. Electricity being supplied by the grid should be continuously monitored to detect and log power quality events. Records that classify power quality phenomena can reveal problematic patterns of the system and provide potential explanations for failures that can be understood and resolved. 
 
-There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification} \cite{Manikandan:2014:PQClassificationUsingSSD} \cite{Thirumala:2016:PQClassificationUsingWavelet} \cite{Rodriguez:2014:PQClassificationUsingANN} \cite{Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. 
+There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification, Manikandan:2014:PQClassificationUsingSSD, Thirumala:2016:PQClassificationUsingWavelet, Rodriguez:2014:PQClassificationUsingANN, Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. 
 
-The contribution of this paper is a tractable, robust, and verified implementation for classifying transients on an open source distributed power quality network. 
+The contribution of this paper is a tractable implementation of a transient classification system on an open source distributed power quality network. ...
 
-This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality project's open source distributed power quality monitoring system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally section \ref{sec:Conlcusion} closes this paper with some final conclusions
+This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality project's open source distributed power quality monitoring system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally section \ref{sec:Conlcusion} closes this paper with some final conclusions.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -698,10 +691,9 @@ Figures \ref{fig:ImpulsiveSim}, \ref{fig:OscillatorySim}, \ref{fig:NotchingSim} 
 
 \section{Conclusion and Future Work}
 \label{sec:Conlcusion}
-The conclusion goes here.
-The conclusion goes here.
-The conclusion goes here.
-The conclusion goes here.
+The accomplishments of this paper is an implementation of a transient detection system on an open source distributed power quality network. The Open Power Quality project's power quality monitoring system provides an extremely useful testing ground for power quality detection algorithms that can be proposed and implemented by the open source community. The methodology proposed in this paper showed promising results on simulated data that can hopefully be validated and refined further with real data. 
+
+Future work on this system could potentially include adding functionality to analyze historically logged transients from different OPQ boxes. A meta analysis for higher level network wide events could lead to the identification of sources of the phenomena.  
 
 
 % conference papers do not normally have an appendix
