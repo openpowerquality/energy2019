@@ -376,7 +376,7 @@ Email: {\tt dickensc@hawaii.edu}}
 \IEEEauthorblockA{Department of Information and\\Computer Sciences\\
 University of Hawaii Manoa\\
 Honolulu, Hawaii 96822\\
-Email: {\tt @hawaii.edu}}
+Email: {\tt achriste@hawaii.edu}}
 }
 
 % conference papers do not typically use \thanks and this command
@@ -453,7 +453,7 @@ The first step to correcting power quality phenomena is understanding the proble
 
 There are many great scientist in the community who would agree that there is a need to be able to classify power quality phenomena and they have come up with impressive methodologies \cite{Garrido:2014:PhenomenaClassification, Manikandan:2014:PQClassificationUsingSSD, Thirumala:2016:PQClassificationUsingWavelet, Rodriguez:2014:PQClassificationUsingANN, Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another more novel approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm. 
 
-The contribution of this paper is a tractable implementation of a transient classification system on an open source distributed power quality network. ...
+The contribution of this paper is a tractable implementation of a transient classification system in an active open source distributed power quality network, OpenPowerQuality (OPQ). By including this transient detection system in OPQ, we can gather information on local transients and global transients (transients from a single source that were detected on multiple, distributed sensors). This information can be used to determine how transients and other power quality (PQ) signals propagate throughout a power grid. Further, data metrics generated from intermittent renewable sources, weather reports, and user reports can be fused by OPQ with the transient detection results to provide insights on how intermittent renewable energy sources affect the quality of power on the grid.
 
 This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality project's open source distributed power quality monitoring system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally section \ref{sec:Conlcusion} closes this paper with some final conclusions.
 
@@ -485,7 +485,7 @@ Periodic Notching & Periodic and strictly negative in power. \\
 \end{table}
 \captionsetup{font={footnotesize,rm},justification=centering,labelsep=period}%
 
-A decision tree algorithm is used to classify signals with potential transients. The benefit of this approach is that it minimizes unnecessary computation. As power quality features are mined from the signal, the potential classes that it could fall into are narrowed. Computationally expensive analysis can be bypassed if simple features can rule out a class early in the process. Leveraging this idea, the potential transients are checked to see if they fit the classes in the same order as listed in table \ref{TransientClasses}. Once the signal is classified, then additional meta data can be computed that appropriately detail the transient.
+A decision tree algorithm is used to classify signals with potential transients. The benefit of this approach is that it minimizes unnecessary computation. As power quality features are extracted from the signal, the potential classes that it could fall into are narrowed. Computationally expensive analysis can be bypassed if simple features can rule out a class early in the process. Leveraging this idea, the potential transients are checked to see if they fit the classes in the same order as listed in table \ref{TransientClasses}. Once the signal is classified, then additional meta data can be computed that appropriately details the transient.
 
 \subsection{Signal Decomposition}
 
@@ -624,13 +624,13 @@ The peaks of the autocorrelation signal are determined by setting a height thres
 \label{sec:Implementation}
 The methodologies proposed in this paper were implemented and tested on the Open Power Quality (OPQ) system. The OPQ project began in 2012 with the goal of developing and evaluating technology to support important improvements to the electrical infrastructure. 
 
-At the 10,000 foot level, the OPQ system architecture is simple: OPQ boxes are plugged into outlets, they monitor the quality of power, and the results are communicated to cloud based storage. Taking a closer look, OPQ consists of four major open source hardware and software components that provide end-to-end support for the capture, triggering, analysis, and reporting of local and global level power quality phenomena. 
+At the 10,000 foot level, the OPQ system architecture is simple: OPQ boxes are plugged into outlets, they monitor the power quality (PQ), and the results are communicated to cloud based storage. Taking a closer look, OPQ consists of four major open source hardware and software components that provide end-to-end support for the capture, triggering, analysis, and reporting of local and global level PQ phenomena. One of the major design goals of OPQ is to not just report PQ locally for each device, but to look at PQ in an aggregate manner. This is possible because the OPQ cloud services provide a global view of all PQ sensors (OPQBoxes). Thus, OPQ is able to detect distributed PQ incidents (where multiple distributed sensors sense the same incident) and also observe how PQ incidents propagate through the electrical grid.
 
-The Makai system is responsible for aggregating and processing the measurements generated by the OPQ boxes. The triggering broker will create a power quality event when it detects a deviation from the nominal waveform in a low fidelity data stream and send a message to the Mauka system to analyze the event further. The Mauka system is where the high fidelity analysis is completed, and where the transient detection system is implemented.
+The Makai system is responsible for aggregating and processing the measurements generated by the OPQ boxes. The triggering broker will create a power quality event when it detects a deviation from the nominal waveform in a low fidelity data stream and send a message to the Mauka system to analyze the event further. The Mauka system is where the high fidelity analysis of PQ phenomena occurs and where the transient detection system is implemented.
 
-First, the raw signal decomposed into its fundamental and potential transient waveform. The fundamental waveform is extracted using a digital implementation of a 4th order low pass Butterworth filter with a cutoff frequency of $500$Hz. The digital filter used is an implementation in the scientific Python library SciPy \cite{scipy:2019}. The transient waveform is then the raw waveform minus the fundamental waveform.
+First, the raw signal is decomposed into its fundamental and potential transient waveform. The fundamental waveform is extracted using a digital implementation of a 4th order low pass Butterworth filter with a cutoff frequency of $500$Hz. The digital filter used is an implementation in the scientific Python library SciPy \cite{scipy:2019}. The transient waveform is then the raw waveform minus the fundamental waveform.
 
-It cannot safely be assumed that only a single transient exists in a power quality event triggered by the Mauka system. Therefore, before classification, the complete transient waveform is separated into potential windows with individual transients. This is achieved through a sliding window technique with a predefined threshold for a maximum lull. The maximum lull between transients is a design decision that is made with domain knowledge. The transients that are being classified with the system are expected to have a duration on the order of miliseconds. 
+It cannot safely be assumed that only a single transient exists in a power quality event triggered by the Mauka system. Therefore, before classification, the complete transient waveform is separated into potential windows with individual transients. This is achieved through a sliding window technique with a predefined threshold for a maximum lull. The maximum lull between transients is a design decision that is made with domain knowledge. The transients that are being classified with the system are expected to have a duration on the order of milliseconds. 
 
 The sliding window method works by first scanning the transient waveform and finding the first measurement which is above the configuration noise floor. It is common practice to account for potential instrumentation error by defining a noise floor. Measurement deviating from the nominal waveform more than the defined noise floor are considered to be significant and can reasonably considered to be a power quality phenomena and not a faulty measurement. The noise floor in the implementation is defined to be $5\%$ of the nominal voltage. 
 
@@ -691,9 +691,9 @@ Figures \ref{fig:ImpulsiveSim}, \ref{fig:OscillatorySim}, \ref{fig:NotchingSim} 
 
 \section{Conclusion and Future Work}
 \label{sec:Conlcusion}
-The accomplishments of this paper is an implementation of a transient detection system on an open source distributed power quality network. The Open Power Quality project's power quality monitoring system provides an extremely useful testing ground for power quality detection algorithms that can be proposed and implemented by the open source community. The methodology proposed in this paper showed promising results on simulated data that can hopefully be validated and refined further with real data. 
+The accomplishments of this paper is an implementation of a transient detection system on an open source distributed power quality network. The Open Power Quality project's PQ monitoring system provides an extremely useful testing ground for PQ detection algorithms that can be proposed and implemented by the open source community. The methodology outlined in this paper showed promising results on simulated data that can hopefully be validated and refined further with real data. 
 
-Future work on this system could potentially include adding functionality to analyze historically logged transients from different OPQ boxes. A meta analysis for higher level network wide events could lead to the identification of sources of the phenomena.  
+Future work on this system could potentially include adding functionality to analyze historically logged transients from different OPQ boxes. A meta analysis for higher level network wide events could lead to the identification of sources of the PQ phenomena. This data could be fundamental in our understanding of how intermittent renewable energy sources affect PQ on the power grid, helping us answer fundamental questions about how best to modernize our grids towards integrating distributed renewable energy
 
 
 % conference papers do not normally have an appendix
