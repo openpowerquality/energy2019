@@ -1,3 +1,7 @@
+## IntelliJ
+*.iml
+.idea
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -8,6 +12,7 @@
 *.toc
 *.make
 *.d
+*.temp
 
 ## Intermediate documents:
 *.dvi
