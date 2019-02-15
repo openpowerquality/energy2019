@@ -377,6 +377,12 @@ Email: {\tt dickensc@hawaii.edu}}
 University of Hawaii Manoa\\
 Honolulu, Hawaii 96822\\
 Email: {\tt achriste@hawaii.edu}}
+\and
+\IEEEauthorblockN{~\\[-0.4ex]\large Philip Johnson\\[0.3ex]\normalsize}
+\IEEEauthorblockA{Department of Information and\\Computer Sciences\\
+University of Hawaii Manoa\\
+Honolulu, Hawaii 96822\\
+Email: {\tt johnson@hawaii.edu}}
 }
 
 % conference papers do not typically use \thanks and this command
@@ -417,15 +423,13 @@ Email: {\tt achriste@hawaii.edu}}
 \begin{abstract}
 %\boldmath
 
-\end{abstract}
-% IEEEtran.cls defaults to using nonbold math in the Abstract.
-% This preserves the distinction between vectors and scalars. However,
-% if the conference you are submitting to favors bold math in the abstract,
-% then you can use LaTeX's standard command \boldmath at the very start
-% of the abstract to achieve this. Many IEEE journals/conferences frown on
-% math in the abstract anyway.
+Capturing and classifying power quality phenomena is a primary concern in the energy fields. Logging power quality events and identifying recurring issues is necessary for the development of an efficient and stable grid.  
 
-% no keywords
+This paper presents methods for classifying transients recorded on an active open source network of power quality sensors. The methods follows a tractable algorithm which applies well understood signal processing methods and statistical inference for feature extraction and decision making.
+
+The methods proposed are tested on multiple types of simulated power quality disturbances demonstrating the capabilities of the system. The results of this research leads to the successful implementation of a transient classifier on an open source distributed power quality network, OpenPowerQuality. Additional functionality can be easily added to the system, including a meta analysis to capture higher level network wide events on the the OpenPowerQuality network.
+
+\end{abstract}
 
 \begin{IEEEkeywords}
 Anything; Something; Everything else.%
