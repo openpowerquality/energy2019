@@ -428,7 +428,7 @@ Capturing and classifying power quality phenomena is important for the smooth fu
 \end{abstract}
 
 \begin{IEEEkeywords}
-Power quality, power transients, open source, renewable energy%
+Power quality; power transients; open source; renewable energy%
 \end{IEEEkeywords}
 
 
@@ -454,9 +454,9 @@ A first step to correcting power quality problems is understanding the problem f
 
 There is considerable research on classification of power quality \cite{Garrido:2014:PhenomenaClassification, Manikandan:2014:PQClassificationUsingSSD, Thirumala:2016:PQClassificationUsingWavelet, Rodriguez:2014:PQClassificationUsingANN, Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm.
 
-In this paper, we present a tractable implementation of a transient classification system in our open source distributed power quality network called Open Power Quality (OPQ). By including this transient detection system in OPQ, we can gather information on both local transients and global transients (i.e. transients from a single source that were detected on multiple, distributed sensors). This information can be used to determine how transients and other power quality (PQ) signals propagate throughout a power grid. Further, data metrics generated from intermittent renewable sources, weather reports, and user reports can be fused by OPQ with the transient detection results to provide insights on how intermittent renewable energy sources affect the quality of power on the grid.
+In this paper, we present a tractable implementation of a transient classification system in our open source distributed power quality network called Open Power Quality (OPQ). By including this transient detection system in OPQ, we can gather information on both local transients and global transients (i.e., transients from a single source that were detected on multiple, distributed sensors). This information can be used to determine how transients and other Power Quality (PQ) signals propagate throughout a power grid. Further, data metrics generated from intermittent renewable sources, weather reports, and user reports can be fused by OPQ with the transient detection results to provide insights on how intermittent renewable energy sources affect the quality of power on the grid.
 
-This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally section \ref{sec:Conlcusion} provides with conclusions.
+This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the Open Power Quality system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally, Section \ref{sec:Conlcusion} provides with conclusions.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -483,17 +483,17 @@ Periodic Notching & Periodic and strictly negative in power. \\
 \end{table}
 \captionsetup{font={footnotesize,rm},justification=centering,labelsep=period}%
 
-We use a decision tree algorithm to classify signals with potential transients. The benefit of this approach is that it minimizes unnecessary computation. As power quality features are extracted from the signal, the potential classes that it could fall into are narrowed. Computationally expensive analysis can be bypassed if simple features can rule out a class early in the process. Leveraging this idea, the potential transients are checked to see if they fit the classes in the same order as listed in table \ref{TransientClasses}. Once the signal is classified, then additional meta data can be computed that appropriately details the transient.
+We use a decision tree algorithm to classify signals with potential transients. The benefit of this approach is that it minimizes necessary computation. As power quality features are extracted from the signal, the potential classes that it could fall into are narrowed. Computationally expensive analysis can be bypassed if simple features can rule out a class early in the process. Leveraging this idea, the potential transients are checked to see if they fit the classes in the same order as listed in Table \ref{TransientClasses}. Once the signal is classified, then additional meta data can be computed that appropriately details the transient.
 
 \subsection{Signal Decomposition}
 
-The first task is to decompose the raw signal into the fundamental waveform and the potential transient waveform. In the context of this application, the fundamental waveform is expected to have little to no variation from the standard, which is $60$Hz and $120$ Vrms in the U.S. \cite{ANSI:2016:C84.1-2016}. There is the potential for simultaneous waveform distortion and transient power quality phenomena. However, waveform distortions for frequency phenomena are typically found to only vary by $\pm 0.1$Hz and for voltage phenomena by $0.1-1.8$pu \cite{IEEE:2018:1159D3}, whereas the transients that the system is capturing typically have a spectral content between $1$kHz-$5$MHz.
+The first task is to decompose the raw signal into the fundamental waveform and the potential transient waveform. In the context of this application, the fundamental waveform is expected to have little to no variation from the standard, which is $60$ Hz and $120$ Vrms in the U.S. \cite{ANSI:2016:C84.1-2016}. There is the potential for simultaneous waveform distortion and transient power quality phenomena. However, waveform distortions for frequency phenomena are typically found to only vary by $\pm 0.1$ Hz and for voltage phenomena by $0.1$–$1.8$ pu \cite{IEEE:2018:1159D3}, whereas the transients that the system is capturing typically have a spectral content between $1$ kHz–$5$ MHz.
 
-Thus, a simple digital implementation of a low pass $4^{th}$ order Butterworth filter with a cutoff frequency at $500$Hz is justifiable and practical for this application to extract the fundamental waveform from the raw digital signal. A different filter could be used to achieve similar results. We decided to use a Butterworth filter with these order and cutoff frequencies due to the desirable property that the filter is monotonic in both the passband and stopband, which results is a clean decomposition. Once the fundamental waveform is retrieved, the transient waveform is then obtained by subtracting out the fundamental waveform from the raw signal.
+Thus, a simple digital implementation of a $4^{th}$ order low pass Butterworth filter with a cutoff frequency at $500$ Hz is justifiable and practical for this application to extract the fundamental waveform from the raw digital signal. A different filter could be used to achieve similar results. We decided to use a Butterworth filter with these order and cutoff frequencies due to the desirable property that the filter is monotonic in both the passband and stopband, which results in a clean decomposition. Once the fundamental waveform is retrieved, the transient waveform is then obtained by subtracting out the fundamental waveform from the raw signal.
 
 \subsection{Classifying Impulsive Transients}
 
-The first step in the decision tree algorithm is to determine whether the transient could be impulsive. We test for impulsive transients first since the power quality traits that are necessary and sufficient to show that the transient is impulsive are computationally cheap to verify. As defined by the IEEE 1159 standard, an impulsive transient is a unidirectional change from the nominal condition of the voltage \cite{IEEE:2018:1159D3}. Therefore, a simple check which ensures that the excitation in the transient waveform is unipolar will qualify the transient to be in the broad category of impulsive transients.
+The first step in the decision tree algorithm is to determine whether the transient could be impulsive. We test for impulsive transients first since as it is computationally the cheapest to verify. As defined by the IEEE 1159 standard, an impulsive transient is a unidirectional change from the nominal condition of the voltage \cite{IEEE:2018:1159D3}. Therefore, a simple check which ensures that the excitation in the transient waveform is unipolar will qualify the transient to be in the broad category of impulsive transients.
 
 If the transient is impulsive, then arcing and oscillatory transients can be ruled out. Additional cases do need to be accounted for since there is a chance that the transient could also be periodic notching. If the impulsive transient is positive in power, then periodic notching can be ruled out, otherwise it needs to be tested. At this point meta-data detailing the rise and decay time, the peak amplitude, and whether or not the transient causes additional zero crossings in the raw signal can be calculated and recorded with the classification.
 
@@ -507,16 +507,16 @@ Thus, the test for arcing transients can  be a verification of more than ten zer
 
 An oscillatory transient is a bipolar change that typically lasts between a few milliseconds to a quarter cycle of the nominal waveform. It is characterized by its frequency content and decay rate \cite{IEEE:2018:1159D3}.
 
-To determine whether the potential transient fits the oscillatory classification, the system implements an incremental F-Test. The F-Test gives a numerical value of the significance of additional variables added to the regression function. The null hypothesis of the test is  $H_0: \beta_3 = \beta_4 = \beta_5 = 0$.
+To determine whether the potential transient fits the oscillatory classification, the system implements an incremental F-test. The F-test gives a numerical value of the significance of additional variables added to the regression function. The null hypothesis of the test is  $H_0: \beta_3 = \beta_4 = \beta_5 = 0$.
 
-We implement this by first computing a least squares curve fitting of the potential transient waveform and an exponentially decaying sinusoid using gradient descent. The complete model is shown in equation \ref{eq:completeModel}.
+We implement this by first computing a least squares curve fitting of the potential transient waveform and an exponentially decaying sinusoid using gradient descent. The complete model is shown in (\ref{eq:completeModel}).
 
 \begin{equation}
 \label{eq:completeModel}
 \hat{y} = \beta_0 + \beta_1 e^{-\beta_2 t} cos(\beta_3 \cdot 2 \pi t + \beta_4)
 \end{equation}
 
-Then a reduced model is fit using the same least square fitting methods. The reduced model equation is shown in \ref{eq:reducedModel}.
+Then, a reduced model is fit using the same least square fitting methods. The reduced model equation is shown in (\ref{eq:reducedModel}).
 
 \begin{equation}
 \label{eq:reducedModel}
@@ -533,7 +533,7 @@ A periodic notching transient is a periodic and strictly negative power disrupti
 
 To test for periodicity the auto-correlation of the signal is computed. Auto-correlation highlights the similarity between the signal and its previous values. Our method convolves the first half the transient signal with the original transient. The convolution is only calculated for points where the signals completely overlap. If the potential transient is indeed periodic, then the resulting signal from the convolution will have the same periodicity with peaks that highlight where the signal had the highest correlation.
 
-Our method determines the peaks of the auto-correlation signal by setting a height threshold. Then it finds the standard deviation of the distance between the peaks, and if this value is less than a defined threshold, the signal is classified as periodic. If so, the period is easily calculated from the auto-correlation signal along with additional meta-data to characterize the transient.
+Our method determines the peaks of the auto-correlation signal by setting a height threshold. Then, it finds the standard deviation of the distance between the peaks, and if this value is less than a defined threshold, the signal is classified as periodic. If so, the period is easily calculated from the auto-correlation signal along with additional meta-data to characterize the transient.
 
 \section{Implementation}
 \label{sec:Implementation}
@@ -546,66 +546,66 @@ The two principle cloud services in OPQ are called Makai and Mauka.  The Makai s
 
 Our implementation proceeds as follows.
 
-First, the raw signal is decomposed into its fundamental and potential transient waveform. The fundamental waveform is extracted using a digital implementation of a 4th order low pass Butterworth filter with a cutoff frequency of $500$Hz. The digital filter used is an implementation in the scientific Python library SciPy \cite{scipy:2019}. The transient waveform is then the raw waveform minus the fundamental waveform.
+First, the raw signal is decomposed into its fundamental and potential transient waveform. The fundamental waveform is extracted using a digital implementation of a $4^{th}$ order low pass Butterworth filter with a cutoff frequency of $500$ Hz. The digital filter used is an implementation in the scientific Python library SciPy \cite{scipy:2019}. The transient waveform is then the raw waveform minus the fundamental waveform.
 
 Our method does not assume that only a single transient exists in a power quality event triggered by the Mauka system. Therefore, before classification, the complete transient waveform is separated into potential windows with individual transients. This is achieved through a sliding window technique with a predefined threshold for a maximum lull. The maximum lull between transients is a design decision that is made with domain knowledge. The transients that are being classified with the system are expected to have a duration on the order of milliseconds.
 
 The sliding window method works by first scanning the transient waveform and finding the first measurement which is above the configuration noise floor. It is common practice to account for potential instrumentation error by defining a noise floor. Measurement deviating from the nominal waveform more than the defined noise floor are considered to be significant and can reasonably be considered to be power quality phenomena and not a faulty measurement. The noise floor in the implementation is defined to be $5\%$ of the nominal voltage.
 
-The first measurement above the noise floor is considered to be the starting point of the transient. Then the scanning continues until there is a lull in measurements above the noise floor longer than the defined maximum, or the scanning has reached the end of the transient signal. At which point the last significant measurement is defined to be the endpoint of the potential transient. This process is repeated until the end of the transient signal is reached.
+The first measurement above the noise floor is considered to be the starting point of the transient. Then, the scanning continues until there is a lull in measurements above the noise floor longer than the defined maximum, or the scanning has reached the end of the transient signal. At which point the last significant measurement is defined to be the endpoint of the potential transient. This process is repeated until the end of the transient signal is reached.
 
-Once the start and end points of all of the potential transients are determined, then the classification analysis can begin. Feature extraction and the decision tree structure is described in detail in section \ref{sec:Methodology}. Only important implementation notes will be mentioned in the rest of this section.
+Once the start and end points of all of the potential transients are determined, then the classification analysis can begin. Feature extraction and the decision tree structure is described in detail in Section \ref{sec:Methodology}. Only important implementation notes will be mentioned in the rest of this section.
 
-The multiple non linear least squares regression required for classification of the oscillatory transient is provided in the SciPy library \cite{scipy:2019}. The solution to the regression is an approximation obtained by a gradient descent method. Since the expected characteristics of oscillatory transients are known, the gradient descent method can be seeded to increase the rate at which a local optima is found.
+The multiple non-linear least squares regression required for classification of the oscillatory transient is provided in the SciPy library \cite{scipy:2019}. The solution to the regression is an approximation obtained by a gradient descent method. Since the expected characteristics of oscillatory transients are known, the gradient descent method can be seeded to increase the rate at which a local optimum is found.
 
 To classify periodic notching transients, a convolution operation is necessary. The code used to implement this calculation is found in the NumPy library \cite{numpy}.
 
 \section{Results}
 \label{sec:Results}
-To test the performance of the proposed methodology, simulated transients were constructed and run through the system.
+To test the performance of the proposed methodology, simulated transients were constructed and run through the system. The configuration of the system at the time of these reported results has the sampling rate at $12000$ Hz.
 
 First, we created a simulated waveform with an impulsive transient by superimposing an exponentially decaying excitation onto a portion of $6$ cycles of a fundamental waveform. This simulated transient has a peak amplitude of $18$ volts and decays to the noise floor in $\frac{1}{32}$ cycles. The raw signal is shown in Figure \ref{fig:ImpulsiveSim}.
 
 \begin{figure}[ht]
 \centering%
 \includegraphics[scale=0.35]{./figures/impulsive_sim.png}
-\caption{Simulated $60$Hz $120$Vrms sine wave with an impulsive transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:ImpulsiveSim}
+\caption{Simulated $60$ Hz $120$ Vrms sine wave with an impulsive transient. The decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:ImpulsiveSim}
 \end{figure}
 
-Second, we created a simulated waveform with an oscillatory transient by superimposing an exponentially decaying sinusoidal wave with $960$Hz frequency with starting amplitude of $72$ volts onto a portion of $6$ cycles of a fundamental waveform. The raw signal is shown in Figure \ref{fig:OscillatorySim}.
+Second, we created a simulated waveform with an oscillatory transient by superimposing an exponentially decaying sinusoidal wave with $960$ Hz frequency with starting amplitude of $72$ volts onto a portion of $6$ cycles of a fundamental waveform. The raw signal is shown in Figure \ref{fig:OscillatorySim}.
 
 \begin{figure}[ht]
 \centering%
 \includegraphics[scale=0.35]{./figures/oscillatory_sim.png}
-\caption{Simulated $60$Hz $120$Vrms sine wave with an oscillatory transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:OscillatorySim}
+\caption{Simulated $60$ Hz $120$ Vrms sine wave with an oscillatory transient. The decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:OscillatorySim}
 \end{figure}
 
-Third, we created a simulated arcing transient by drawing 7 random samples from a uniform random distribution over the support $(61, 2401)$. We then used the random samples to define the frequencies for single cycles of an arcing transient wave. The raw signal is shown in figure \ref{fig:ArcingSim}.
+Third, we created a simulated arcing transient by drawing 7 random samples from a uniform random distribution over the support $(61, 2401)$. We then used the random samples to define the frequencies for single cycles of an arcing transient wave. The raw signal is shown in Figure \ref{fig:ArcingSim}.
 
 \begin{figure}[ht]
 \centering%
 \includegraphics[scale=0.35]{./figures/arcing_sim.png}
-\caption{Simulated $60$Hz $120$Vrms sine wave with an arcing transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:ArcingSim}
+\caption{Simulated $60$ Hz $120$ Vrms sine wave with an arcing transient. The decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:ArcingSim}
 \end{figure}
 
 
-We simulated a multiple zero crossing transient by superimposing three single sawtooth cycles in positions of the fundamental waveform near a zero crossing. The single sawtooth cycle has an amplitude of a $72$ volts and a period of $10$ samples. The configuration of the system at the time of theses reported results has the sampling rate at $12000$Hz. The raw signal is shown in figure \ref{fig:MultZSim}.
+We simulated a multiple zero crossing transient by superimposing three single sawtooth cycles in positions of the fundamental waveform near a zero crossing. The single sawtooth cycle has an amplitude of a $72$ volts and a period of $10$ samples. The raw signal is shown in Figure \ref{fig:MultZSim}.
 
 \begin{figure}[ht]
 \centering%
 \includegraphics[scale=0.35]{./figures/mult_z_crossing_sim.png}
-\caption{Simulated $60$Hz $120$Vrms sine wave with multiple impulsive transients which cause additional zero crossings in the raw waveform. The first decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:MultZSim}
+\caption{Simulated $60$ Hz $120$ Vrms sine wave with multiple impulsive transients which cause additional zero crossings in the raw waveform. The first decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:MultZSim}
 \end{figure}
 
-Finally, we created a simulated waveform with a periodic notching transient by superimposing a sawtooth waveform with a frequency of $1440$Hz and amplitude of $18$ volts for a single fundamental cycle, i.e. 24 notches per cycle for one cycle. We determined the polarity of the notching transient by the fundamental signal since notching is defined to be strictly negative in power. The raw signal is shown in figure \ref{fig:NotchingSim}
+Finally, we created a simulated waveform with a periodic notching transient by superimposing a sawtooth waveform with a frequency of $1440$ Hz and amplitude of $18$ volts for a single fundamental cycle, i.e., 24 notches per cycle for one cycle. We determined the polarity of the notching transient by the fundamental signal since notching is defined to be strictly negative in power. The raw signal is shown in Figure \ref{fig:NotchingSim}
 
 \begin{figure}[htbp]
 \centering%
 \includegraphics[scale=0.35]{./figures/notching_sim.png}
-\caption{Simulated $60$Hz $120$Vrms sine wave with a periodic notching transient. The decomposed fundamental and transient signal are show in the bottom left and right subfigures respectively.}\label{fig:NotchingSim}
+\caption{Simulated $60$ Hz $120$ Vrms sine wave with a periodic notching transient. The decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:NotchingSim}
 \end{figure}
 
-Figures \ref{fig:ImpulsiveSim}, \ref{fig:OscillatorySim}, \ref{fig:ArcingSim}, \ref{fig:NotchingSim} show the raw simulated waveforms with impulsive, oscillatory, arcing, and periodic notching transients, respectively, all starting near the $600^{th}$ measurements. The two subfigures show the extracted fundamental waveform and transient waveform detected by the system. These simulated waveforms were all correctly classified by the system using our methods.
+Figures \ref{fig:ImpulsiveSim}, \ref{fig:OscillatorySim}, \ref{fig:ArcingSim}, \ref{fig:NotchingSim} show the raw simulated waveforms with impulsive, oscillatory, arcing, and periodic notching transients, respectively, all starting near the $600^{th}$ measurement. The two subfigures show the extracted fundamental waveform and transient waveform detected by the system. These simulated waveforms were all correctly classified by the system using our methods. 
 
 \section{Conclusion and Future Work}
 \label{sec:Conlcusion}
