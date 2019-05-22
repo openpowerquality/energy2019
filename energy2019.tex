@@ -108,7 +108,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of IEEE. Loading the cite package will
@@ -423,12 +423,12 @@ Email: {\tt johnson@hawaii.edu}}
 \begin{abstract}
 %\boldmath
 
-Capturing and classifying power quality phenomena is important for the smooth functioning of electrical grids.  This paper presents methods for classifying the four types of transients (impulsive, arcing, oscillatory, and periodic notching) specified in the IEEE 1159 Power Quality standard. Our methods implement a tractable algorithm, which applies well understood signal processing methods and statistical inference for feature extraction and decision making. We tested our methods on simulated power quality disturbances in order to demonstrate the capabilities of the system. The results of this research include an operational implementation of a transient classifier for Open Power Quality, an open source distributed power quality network. Additional functionality can be easily incorporated into the system to extend the utility of our methods, such as a meta-analysis to capture higher level network wide events.
+Capturing and classifying Power Quality (PQ) phenomena is important for the smooth functioning of electrical grids.  This paper presents methods for classifying the four types of transients (impulsive, arcing, oscillatory, and periodic notching) specified in the IEEE 1159 Power Quality standard. Our methods implement a tractable algorithm, which applies well understood signal processing methods and statistical inference for feature extraction and decision making. We tested our methods on simulated PQ disturbances in order to demonstrate the capabilities of the system. The results of this research include an operational implementation of a transient classifier for Open Power Quality, an open source distributed PQ network. Additional functionality can be easily incorporated into the system to extend the utility of our methods, such as a meta-analysis to capture higher level network wide events.
 
 \end{abstract}
 
 \begin{IEEEkeywords}
-Power quality; power transients; open source; renewable energy%
+Power quality; power transients; open source; renewable energy.%
 \end{IEEEkeywords}
 
 
@@ -448,15 +448,15 @@ Power quality; power transients; open source; renewable energy%
 \section{Introduction}
 % no \IEEEPARstart
 
-Introducing renewable energy generation to existing electrical grid infrastructures has proven itself to be an engineering challenge. The transition to cleaner energy generation methods such as wind and solar, which are inherently unpredictable, has increased the severity and frequency of problems related to power quality \cite{Radu:2014:RenewableImpacts}. For example, sensitive instruments connected to an unstable grid can be potentially de-calibrated or damaged.
+Introducing renewable energy generation to existing electrical grid infrastructures has proven itself to be an engineering challenge. The transition to cleaner energy generation methods such as wind and solar, which are inherently unpredictable, has increased the severity and frequency of problems related to Power Quality (PQ) \cite{Radu:2014:RenewableImpacts}. For example, sensitive instruments connected to an unstable grid can be potentially de-calibrated or damaged.
 
-A first step to correcting power quality problems is understanding the problem from top to bottom. Electricity supplied by the grid should be continuously monitored to detect and log power quality events. Classification of power quality phenomena can reveal problematic patterns in the system and provide potential explanations for failures that can be understood and resolved.
+A first step to correcting PQ problems is understanding the problem from top to bottom. Electricity supplied by the grid should be continuously monitored to detect and log PQ events. Classification of PQ phenomena can reveal problematic patterns in the system and provide potential explanations for failures that can be understood and resolved.
 
-There is considerable research on classification of power quality \cite{Garrido:2014:PhenomenaClassification, Manikandan:2014:PQClassificationUsingSSD, Thirumala:2016:PQClassificationUsingWavelet, Rodriguez:2014:PQClassificationUsingANN, Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm.
+There is considerable research on classification of PQ \cite{Garrido:2014:PhenomenaClassification, Manikandan:2014:PQClassificationUsingSSD, Thirumala:2016:PQClassificationUsingWavelet, Rodriguez:2014:PQClassificationUsingANN, Tse:2012:PQClassificationUsingHHT}. Current state of the art techniques commonly utilize wavelet transforms for feature extraction and then run the data through a trained neural network or decision tree algorithm.  Another approach by Manikandan, Samantaray, and Kamwa \cite{Manikandan:2014:PQClassificationUsingSSD} decomposes the signal using sparse signal decomposition on an overcomplete hybrid dictionary matrix and then extracts the power disturbance features of the decomposed signal and classifies the transient waveforms using a decision tree algorithm.
 
-In this paper, we present a tractable implementation of a transient classification system for our open source distributed power quality network called Open Power Quality (OPQ). By including this transient detection system in OPQ, we can gather information on both local transients and global transients (i.e., transients from a single source that were detected on multiple, distributed sensors). This information can be used to determine how transients and other power quality (PQ) signals propagate throughout a power grid. Further, data metrics generated from intermittent renewable sources, weather reports, and user reports can be fused by OPQ with the transient detection results to provide insights on how intermittent renewable energy sources affect the quality of power on the grid.
+In this paper, we present a tractable implementation of a transient classification system for our open source distributed PQ network called Open Power Quality (OPQ). By including this transient detection system in OPQ, we can gather information on both local transients and global transients (i.e., transients from a single source that were detected on multiple, distributed sensors). This information can be used to determine how transients and other PQ signals propagate throughout a power grid. Further, data metrics generated from intermittent renewable sources, weather reports, and user reports can be fused by OPQ with the transient detection results to provide insights on how intermittent renewable energy sources affect the quality of power on the grid.
 
-This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the OPQ system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally, Section \ref{sec:Conlcusion} provides with conclusions.
+This paper is structured as follows. Section \ref{sec:Methodology} explains and justifies the proposed methodology for classifying transients. Section \ref{sec:Implementation} describes the implementation of the methodology on the OPQ system. Section \ref{sec:Results} reports the simulated results of the transient detection system. Finally, Section \ref{sec:Conlcusion} provides the conclusions.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -493,7 +493,7 @@ Thus, a simple digital implementation of a $4^{th}$ order low pass Butterworth f
 
 \subsection{Classifying Impulsive Transients}
 
-The first step in the decision tree algorithm is to determine whether the transient could be impulsive. We test for impulsive transients first since as it is computationally the cheapest to verify. As defined by the IEEE 1159 standard, an impulsive transient is a unidirectional change from the nominal condition of the voltage \cite{IEEE:2018:1159D3}. Therefore, a simple check which ensures that the excitation in the transient waveform is unipolar will qualify the transient to be in the broad category of impulsive transients.
+The first step in the decision tree algorithm is to determine whether the transient could be impulsive. We test for impulsive transients first since it is computationally cheapest to verify. As defined by the IEEE 1159 standard, an impulsive transient is a unidirectional change from the nominal condition of the voltage \cite{IEEE:2018:1159D3}. Therefore, a simple check which ensures that the excitation in the transient waveform is unipolar will qualify the transient to be in the broad category of impulsive transients.
 
 If the transient is impulsive, then arcing and oscillatory transients can be ruled out. Additional cases do need to be accounted for since there is a chance that the transient could also be periodic notching. If the impulsive transient is positive in power, then periodic notching can be ruled out, otherwise it needs to be tested. At this point meta-data detailing the rise and decay time, the peak amplitude, and whether or not the transient causes additional zero crossings in the raw signal can be calculated and recorded with the classification.
 
@@ -597,7 +597,7 @@ We simulated a multiple zero crossing transient by superimposing three single sa
 \caption{Simulated $60$ Hz $120$ Vrms sine wave with multiple impulsive transients which cause additional zero crossings in the raw waveform. The first decomposed fundamental and transient signal are shown in the bottom left and right subfigures, respectively.}\label{fig:MultZSim}
 \end{figure}
 
-Finally, we created a simulated waveform with a periodic notching transient by superimposing a sawtooth waveform with a frequency of $1440$ Hz and amplitude of $18$ volts for a single fundamental cycle, i.e., 24 notches per cycle for one cycle. We determined the polarity of the notching transient by the fundamental signal since notching is defined to be strictly negative in power. The raw signal is shown in Figure \ref{fig:NotchingSim}
+Finally, we created a simulated waveform with a periodic notching transient by superimposing a sawtooth waveform with a frequency of $1440$ Hz and amplitude of $18$ volts for a single fundamental cycle, i.e., 24 notches per cycle for one cycle. We determined the polarity of the notching transient by the fundamental signal since notching is defined to be strictly negative in power. The raw signal is shown in Figure \ref{fig:NotchingSim}.
 
 \begin{figure}[htbp]
 \centering%
